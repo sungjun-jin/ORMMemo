@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ORM</string>
+    <string name="btn_delete">Delete</string>
+</resources>
