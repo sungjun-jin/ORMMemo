@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -113,8 +114,11 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                                        Log.d("Position",position+"");
+                                        Log.d("Data Position",data.get(position) + "");
+                                        con.delete(data.get(position));
                                         data.remove(position);
-                                        adapter.setDataAndRefresh(data);
+                                        reloadData();
                                         Toast.makeText(getBaseContext(), "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 })

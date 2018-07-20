@@ -2,6 +2,7 @@ package com.example.jinsungjun.orm;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -48,5 +49,17 @@ public class DBConnect extends OrmLiteSqliteOpenHelper {
 
         return memoDao;
     }
+
+    public void delete(Memo memo) {
+
+        try {
+            Dao<Memo,Integer> dao = getDao(Memo.class);
+            dao.delete(memo);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
