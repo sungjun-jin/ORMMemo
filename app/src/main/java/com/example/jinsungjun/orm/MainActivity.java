@@ -2,6 +2,7 @@ package com.example.jinsungjun.orm;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.renderscript.ScriptGroup;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
                         Dao<Memo, Integer> memoDao = con.getMemoDao();
                         memoDao.create(memo);
                         Toast.makeText(getBaseContext(), "성공적으로 메모가 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                        editTitle.setText("");
+                        editMemo.setText("");
+                        editAuthor.setText("");
                         reloadData();
                     } catch (Exception e) {
                         Toast.makeText(getBaseContext(), "DB 오류" + e.getMessage(), LENGTH_LONG).show();
@@ -114,8 +119,6 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        Log.d("Position",position+"");
-                                        Log.d("Data Position",data.get(position) + "");
                                         con.delete(data.get(position));
                                         data.remove(position);
                                         reloadData();
@@ -134,14 +137,13 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
-
-
             }
         };
 
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
 
     public void setView() {
@@ -166,13 +168,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void hideKeyBoard() {
-        //키보드 숨기는 함수
-        imm.hideSoftInputFromWindow(editMemo.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(editTitle.getWindowToken(), 0);
-
-    }
-
     public void reloadData() {
 
         //데이터를 재 로딩 해주는 함수
@@ -180,5 +175,15 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDataAndRefresh(data);
     }
 
+    private void detailDelete() {
+
+        //Detail Activity delete button selected
+        Intent intent = getIntent();
+        int position = intent.getIntExtra(Const.DETAIL_DELETE_BUTTON,0);
+        con.delete(data.get(position));
+        data.remove(position);
+        reloadData();
+        Toast.makeText(getBaseContext(), "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+    }
 
 }

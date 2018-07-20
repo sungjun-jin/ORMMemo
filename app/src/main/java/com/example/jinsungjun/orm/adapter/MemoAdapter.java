@@ -3,6 +3,7 @@ package com.example.jinsungjun.orm.adapter;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +103,19 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.Holder> {
         }
 
         public void setMemo() {
-            textMemo.setText(memo.memo);
+
+            //Memo 내용 ...처리
+
+            String temp= "";
+
+            if(memo.memo.length() >= 5) {
+
+                temp = memo.memo.substring(0,6);
+                temp = temp.concat("...");
+            }
+
+            Log.d("String temp",temp);
+            textMemo.setText(temp);
         }
 
         public void setAuthor() {
