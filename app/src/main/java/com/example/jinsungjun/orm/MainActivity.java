@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     MemoAdapter adapter;
     InputMethodManager imm;
 
+    DetailActivity detailActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
         setView();
 
+
+
         //DB 연결
         con = new DBConnect(this);
         //Data를 가져오는 함수
         getData(this);
-        adapter = new MemoAdapter();
+        adapter = new MemoAdapter(this);
         adapter.setDataAndRefresh(data);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -75,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
                     //필수값 가져오기
                     long timestamp = System.currentTimeMillis();
-
 
                     try {
                         Memo memo = new Memo(title, content, author, timestamp);
@@ -174,16 +177,4 @@ public class MainActivity extends AppCompatActivity {
         getData(getBaseContext());
         adapter.setDataAndRefresh(data);
     }
-
-    private void detailDelete() {
-
-        //Detail Activity delete button selected
-        Intent intent = getIntent();
-        int position = intent.getIntExtra(Const.DETAIL_DELETE_BUTTON,0);
-        con.delete(data.get(position));
-        data.remove(position);
-        reloadData();
-        Toast.makeText(getBaseContext(), "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
-    }
-
 }

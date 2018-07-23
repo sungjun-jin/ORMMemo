@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.jinsungjun.orm.Const;
 import com.example.jinsungjun.orm.DetailActivity;
+import com.example.jinsungjun.orm.MainActivity;
 import com.example.jinsungjun.orm.Memo;
 import com.example.jinsungjun.orm.R;
 
@@ -21,6 +22,17 @@ import java.util.List;
 public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.Holder> {
 
     List<Memo> data;
+
+    MainActivity mainActivity;
+
+    public MemoAdapter(MainActivity mainActivity) {
+
+        this.mainActivity = mainActivity;
+    }
+
+    public MemoAdapter() {
+
+    }
 
     public void setDataAndRefresh(List<Memo> data) {
 
@@ -32,7 +44,7 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.Holder> {
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_memo,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_memo, parent, false);
         return new Holder(view);
     }
 
@@ -72,9 +84,10 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.Holder> {
                 public void onClick(View view) {
 
                     // 메모를 클릭했을 시 해당 메모의 상세 페이지로 이동                    T
-                    Intent intent  = new Intent(itemView.getContext(), DetailActivity.class);
-                    intent.putExtra(Const.DETAIL_MEMO,memo.position);
+                    Intent intent = new Intent(itemView.getContext(), DetailActivity.class);
+                    intent.putExtra(Const.DETAIL_MEMO, memo.position);
                     itemView.getContext().startActivity(intent);
+                    mainActivity.finish();
 
                 }
             });
@@ -104,18 +117,7 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.Holder> {
 
         public void setMemo() {
 
-            //Memo 내용 ...처리
-
-            String temp= "";
-
-            if(memo.memo.length() >= 5) {
-
-                temp = memo.memo.substring(0,6);
-                temp = temp.concat("...");
-            }
-
-            Log.d("String temp",temp);
-            textMemo.setText(temp);
+            textMemo.setText(memo.memo);
         }
 
         public void setAuthor() {

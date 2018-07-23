@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,9 +25,12 @@ public class DetailActivity extends AppCompatActivity {
 
     MemoAdapter adapter;
 
+    static DBConnect con;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
@@ -36,6 +40,9 @@ public class DetailActivity extends AppCompatActivity {
         textDate = findViewById(R.id.textDate);
         textAuthor = findViewById(R.id.textAuthor);
         btnDelete = findViewById(R.id.btnDelete);
+
+        con = new DBConnect(this);
+
 
         adapter = new MemoAdapter();
 
@@ -60,10 +67,16 @@ public class DetailActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                                        con.delete(data.get(memo.position));
+                                        data.remove(memo.position);
+                                        Toast.makeText(getBaseContext(), "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                        MainActivity.getData(getBaseContext());
+                                        adapter.setDataAndRefresh(data);
                                         Intent intent = new Intent(getBaseContext(),MainActivity.class);
-                                        intent.putExtra(Const.DETAIL_DELETE_BUTTON,memo.position);
                                         startActivity(intent);
                                         finish();
+                                        Log.d("terminated","term");
+
 
                                     }
                                 })
@@ -105,5 +118,11 @@ public class DetailActivity extends AppCompatActivity {
         textDate.setText("작성일 : " + sdf.format(memo.timestamp));
     }
 
+    @Override
+    public void onBackPressed() {
 
+        MainActivity.getData(getBaseContext());
+        adapter.setDataAndRefresh(data);
+        super.onBackPressed();
+    }
 }
